@@ -27,8 +27,11 @@ async function store(data) {
       throw createError(400, "Email already in use")
 
    data.password = await encrypt(data.password)
-   // if (!data.profilePic)
-      data.profilePic = `https://api.dicebear.com/8.x/identicon/svg?seed=${data.name}`
+   if (!data.profilePic)
+   {
+      const profileName = data.name.toLowerCase().replace(" ", '_')
+      data.profilePic = `https://api.dicebear.com/8.x/identicon/svg?seed=${profileName}`
+   }
 
    const koder = await Users.create(data)
    return koder
@@ -41,6 +44,9 @@ async function show(id) {
 
 async function update(id, data) {
    data.updated_at = new Date()
+   if (data.password) 
+      data.password = await encrypt(data.password)
+
    const koder = await Users.findByIdAndUpdate(id, data, {
       new: true
    })
