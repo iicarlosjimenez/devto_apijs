@@ -29,7 +29,14 @@ const schema = new mongoose.Schema({
    },
    updated_at: {
       type: Date
+   },
+   slug: {
+      type: String,
+      required: true,
+      unique: true
    }
 })
+
+schema.index({ slug: 1 }, { unique: true })
 
 module.exports = mongoose.model(modelName, schema)
