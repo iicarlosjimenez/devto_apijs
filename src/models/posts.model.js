@@ -18,6 +18,11 @@ const schema = new mongoose.Schema({
       type: mongoose.Types.ObjectId,
       ref: "users"
    },
+   tags: [{ 
+      type: mongoose.Schema.Types.ObjectId, 
+      required: true,
+      ref: "tags"
+   }],
    created_at: {
       type: Date,
       default: Date.now

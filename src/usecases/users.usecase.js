@@ -1,10 +1,10 @@
 const createError = require('http-errors')
-const Users = require('../models/users.model')
+const usersModel = require('../models/users.model')
 const { encrypt } = require('../lib/encrypt')
 const validator = require('../lib/validator')
 
 async function index() {
-   const users = await Users.find({}, {password:0})
+   const users = await usersModel.find({}, {password:0})
 
    return users
 }
@@ -21,7 +21,7 @@ async function store(data) {
       throw createError(400, JSON.stringify(validate.messages))
 
 
-   const userFound = await Users.findOne({ email: data.email })
+   const userFound = await usersModel.findOne({ email: data.email })
 
    if (userFound)
       throw createError(400, "Email already in use")
@@ -33,12 +33,12 @@ async function store(data) {
       data.profilePic = `https://api.dicebear.com/8.x/identicon/svg?seed=${profileName}`
    }
 
-   const koder = await Users.create(data)
+   const koder = await usersModel.create(data)
    return koder
 }
 
 async function show(id) {
-   const koder = await Users.findById(id, { password: 0 })
+   const koder = await usersModel.findById(id, { password: 0 })
    return koder
 }
 
@@ -47,14 +47,14 @@ async function update(id, data) {
    if (data.password) 
       data.password = await encrypt(data.password)
 
-   const koder = await Users.findByIdAndUpdate(id, data, {
+   const koder = await usersModel.findByIdAndUpdate(id, data, {
       new: true
    })
    return koder
 }
 
 async function destroy(id) {
-   await Users.findByIdAndDelete(id)
+   await usersModel.findByIdAndDelete(id)
    return
 }
 

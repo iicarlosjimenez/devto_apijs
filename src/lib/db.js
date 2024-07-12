@@ -14,4 +14,11 @@ function connect() {
    return mongoose.connect(URI)
 }
 
-module.exports = { connect }
+function close() {
+   mongoose.connection.close(() => {
+      console.info("MongoDB connection closed.");
+      process.exit(0);
+   })
+}
+
+module.exports = { connect, close }
